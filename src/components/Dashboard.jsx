@@ -181,7 +181,7 @@ export default function Dashboard() {
             >
               <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-5 border border-gray-100">
                 <div className="flex justify-between items-center">
-                  <p className="text-sm text-gray-500 font-medium">Total Passengers</p>
+                  <p className="text-sm text-gray-500 font-medium">Total Crowd</p>
                   <div className="p-2 bg-blue-50 rounded-lg">
                     <Users size={18} className="text-blue-600" />
                   </div>
