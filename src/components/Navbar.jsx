@@ -170,7 +170,7 @@ export default function Navbar() {
                     activeTab === item.id 
                       ? 'bg-white bg-opacity-10 border-l-4 border-teal-300' 
                       : 'text-indigo-100 border-l-4 border-transparent'
-                  } block px-4 py-3 rounded-r-lg text-base font-medium flex items-center`}
+                  } px-4 py-3 rounded-r-lg text-base font-medium flex items-center`}
                   aria-current={activeTab === item.id ? 'page' : undefined}
                 >
                   <span className="text-xl mr-3">{item.icon}</span>
