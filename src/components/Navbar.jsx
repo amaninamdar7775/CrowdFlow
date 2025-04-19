@@ -62,7 +62,12 @@ export default function Navbar() {
                 className="text-white font-bold text-xl flex items-center"
               >
                 <Link to="/" className="flex items-center">
-                  <span className="text-3xl mr-3 bg-white bg-opacity-20 p-2 rounded-full">👥</span>
+                  {/* Replace emoji with local logo image */}
+                  <img 
+                    src={'https://cdn-icons-png.flaticon.com/512/2110/2110514.png'} 
+                    alt="CrowdFlow Logo" 
+                    className="h-12 w-12 mr-3 rounded-full bg-white bg-opacity-20 p-1 object-contain"
+                  />
                   <div className="flex flex-col">
                     <span className="text-2xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-teal-200 to-purple-200">CrowdFlow</span>
                     <span className="text-xs text-indigo-200 font-light">Real-time Crowd Management</span>
