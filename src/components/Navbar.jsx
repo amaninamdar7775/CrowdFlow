@@ -12,7 +12,7 @@ export default function Navbar() {
     { id: 'railway', label: 'Railway Stations', icon: '🚆', to: '/stations/railway' },
     { id: 'metro', label: 'Metro Stations', icon: '🚇', to: '/stations/metro' },
     { id: 'bus', label: 'Bus Stations', icon: '🚌', to: '/stations/bus' },
-    { id: 'mall', label: 'Shopping Malls', icon: '🏬', to: '/malls' },
+    { id: 'mall', label: 'Shopping Malls', icon: '🏬', to: '/shopping/malls' },
   ];
 
   useEffect(() => {

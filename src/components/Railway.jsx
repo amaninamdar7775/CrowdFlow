@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  AlertCircle, 
   Users, 
   Clock, 
-  TrendingUp, 
   Map, 
-  Activity,
   AlertTriangle,
   ChevronDown,
   ArrowUpRight,
-  Layers
+  Layers,
+  Ticket
 } from 'lucide-react';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 const initialStationAreas = [
   { id: 1, name: 'Main Entrance', crowdLevel: 65, capacity: 100, trend: 'increasing', status: 'warning' },
@@ -45,6 +44,7 @@ export default function Railway() {
   ]);
   const [totalVisitors, setTotalVisitors] = useState(1248);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showTicketModal, setShowTicketModal] = useState(false);
 
   useEffect(() => {
     const updateTime = () => {
@@ -161,6 +161,10 @@ export default function Railway() {
 
     setStationAreas(newAreas);
   };
+
+  const toggleTicketModal = () => {
+    setShowTicketModal(!showTicketModal);
+  };
   
   const totalCapacity = stationAreas.reduce((sum, area) => sum + area.capacity, 0);
   const currentOccupancy = stationAreas.reduce((sum, area) => sum + area.crowdLevel, 0);
@@ -188,6 +192,21 @@ export default function Railway() {
       
       {/* Main Content - Now positioned below the navbar */}
       <div className="flex-1 overflow-x-hidden overflow-y-auto">
+        
+        {/* Book Tickets Button - Fixed position */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="fixed bottom-6 right-6 z-30"
+        >
+          <button 
+            onClick={toggleTicketModal}
+            className="flex items-center bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-3 rounded-full shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+          >
+            <Ticket size={20} className="mr-2" />
+            Book Tickets
+          </button>
+        </motion.div>
         
         {/* Dashboard Content */}
         <main className="p-4 md:p-6">
@@ -311,7 +330,8 @@ export default function Railway() {
                       <motion.div 
                         key={area.id}
                         variants={itemVariants}
-                        className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0"
+                        onClick={() => handleAreaClick(area)}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 pb-4 border-b border-gray-100 last:border-0 last:mb-0 last:pb-0 cursor-pointer hover:bg-gray-50 rounded-lg p-2 transition-colors"
                       >
                         <div className="mb-2 sm:mb-0">
                           <h3 className="font-medium text-gray-800 flex items-center">
@@ -429,7 +449,103 @@ export default function Railway() {
             </motion.div>
           </motion.div>
         </main>
+        <Footer />
       </div>
+      
+      {/* Book Tickets Modal */}
+      {showTicketModal && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
+        >
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-xl shadow-xl max-w-md w-full p-6"
+          >
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-xl font-bold flex items-center">
+                <Ticket size={20} className="mr-2 text-blue-600" />
+                Book Railway Tickets
+              </h3>
+              <button 
+                onClick={toggleTicketModal}
+                className="p-1.5 bg-gray-100 rounded-full hover:bg-gray-200 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">From</label>
+                <select className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option>Select origin station</option>
+                  <option>Pune Junction</option>
+                  <option>Lonavla</option>
+                  <option>Hadapsar Station</option>
+                  <option>Loni Station</option>
+                  <option>Uruli Station</option>
+                </select>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">To</label>
+                <select className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                  <option>Select destination station</option>
+                  <option>Pune Junction</option>
+                  <option>Lonavla</option>
+                  <option>Hadapsar Station</option>
+                  <option>Loni Station</option>
+                  <option>Uruli Station</option>
+                </select>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                  <input 
+                    type="date" 
+                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Passengers</label>
+                  <select className="w-full border border-gray-300 rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                    <option>1 Passenger</option>
+                    <option>2 Passengers</option>
+                    <option>3 Passengers</option>
+                    <option>4+ Passengers</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Class</label>
+                <div className="grid grid-cols-3 gap-2">
+                  <button className="p-2.5 border-2 border-blue-600 rounded-lg text-blue-600 font-medium">
+                    Economy
+                  </button>
+                  <button className="p-2.5 border border-gray-300 rounded-lg text-gray-700 font-medium hover:border-blue-600 hover:text-blue-600 transition-colors">
+                    Business
+                  </button>
+                  <button className="p-2.5 border border-gray-300 rounded-lg text-gray-700 font-medium hover:border-blue-600 hover:text-blue-600 transition-colors">
+                    First Class
+                  </button>
+                </div>
+              </div>
+              
+              <button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg mt-2 transition-colors">
+                Search Trains
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
       
       {/* Mobile nav overlay */}
       {isMobileMenuOpen && (

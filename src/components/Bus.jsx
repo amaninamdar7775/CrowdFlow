@@ -1,21 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { 
-  AlertCircle, 
   Users, 
   Clock, 
-  TrendingUp, 
   Map, 
-  Activity,
   AlertTriangle,
   ChevronDown,
   ArrowUpRight,
   Layers,
-  Bus
+  Bus,
+  Ticket
 } from 'lucide-react';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
-// Sample data for bus station areas
 const initialStationAreas = [
   { id: 1, name: 'Main Terminal', crowdLevel: 55, capacity: 100, trend: 'increasing', status: 'warning' },
   { id: 2, name: 'Ticket Counter', crowdLevel: 75, capacity: 100, trend: 'stable', status: 'warning' },
@@ -25,7 +23,6 @@ const initialStationAreas = [
   { id: 6, name: 'Waiting Lounge', crowdLevel: 45, capacity: 100, trend: 'stable', status: 'normal' }
 ];
 
-// Mock historical data for crowd levels
 const historicalData = [
   { time: '6:00', level: 25 },
   { time: '8:00', level: 85 },
@@ -48,13 +45,17 @@ export default function BusStations() {
   ]);
   const [totalVisitors, setTotalVisitors] = useState(986);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isButtonHovered, setIsButtonHovered] = useState(false);
   const [nextDepartures, setNextDepartures] = useState([
     { id: 1, route: '305', destination: 'Swargate', bay: 'Bay 3', time: '5 min', status: 'On Time' },
     { id: 2, route: '875', destination: 'Airport', bay: 'Bay 8', time: '12 min', status: 'Delayed' },
     { id: 3, route: '122', destination: 'University', bay: 'Bay 5', time: '17 min', status: 'On Time' },
   ]);
 
-  // Update time every minute
+  const handleBookTickets = () => {
+    window.location.href = "https://pmpml.org/";
+  };
+
   useEffect(() => {
     const updateTime = () => {
       const now = new Date();
@@ -66,19 +67,15 @@ export default function BusStations() {
     
     return () => clearInterval(interval);
   }, []);
-
-  // Simulate crowd changes over time
   useEffect(() => {
     const interval = setInterval(() => {
       setStationAreas(prevAreas => {
         return prevAreas.map(area => {
-          // Randomly adjust crowd levels slightly
+
           let newLevel = area.crowdLevel + (Math.random() > 0.5 ? 1 : -1) * Math.floor(Math.random() * 5);
           
-          // Keep within bounds
           newLevel = Math.max(10, Math.min(100, newLevel));
           
-          // Determine trend
           let trend = 'stable';
           let status = 'normal';
           
@@ -255,9 +252,85 @@ export default function BusStations() {
     visible: { opacity: 1, y: 0 }
   };
 
+  const buttonVariants = {
+    idle: { 
+      scale: 1,
+      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)"
+    },
+    hover: { 
+      scale: 1.05,
+      boxShadow: "0 10px 15px rgba(0, 0, 0, 0.2)"
+    },
+    tap: { 
+      scale: 0.95,
+      boxShadow: "0 2px 3px rgba(0, 0, 0, 0.15)" 
+    }
+  };
+
+  const particleVariants = {
+    hidden: { opacity: 0, scale: 0 },
+    visible: (i) => ({
+      opacity: [0, 1, 0],
+      scale: [0, 1.5, 0],
+      y: [0, -30 * i, -60 * i],
+      x: [0, (i - 1.5) * 20, (i - 1.5) * 40],
+      transition: {
+        repeat: Infinity,
+        repeatDelay: 2,
+        duration: 1.5 + i * 0.2,
+        delay: i * 0.1
+      }
+    })
+  };
+
   return (
     <div className="flex flex-col h-screen bg-gray-50 text-gray-800 font-sans">
       <Navbar />
+      
+      {/* Floating Book Tickets Button */}
+      <div className="fixed bottom-6 right-6 z-50">
+        <motion.div
+          className="relative"
+          initial="idle"
+          whileHover="hover"
+          whileTap="tap"
+          animate={isButtonHovered ? "hover" : "idle"}
+          onHoverStart={() => setIsButtonHovered(true)}
+          onHoverEnd={() => setIsButtonHovered(false)}
+        >
+          {/* Animated particles */}
+          {isButtonHovered && (
+            <>
+              {[1, 2, 3, 4, 5].map((i) => (
+                <motion.div
+                  key={i}
+                  custom={i}
+                  variants={particleVariants}
+                  initial="hidden"
+                  animate="visible"
+                  className="absolute top-1/2 left-1/2 w-2 h-2 rounded-full bg-yellow-400"
+                />
+              ))}
+            </>
+          )}
+          
+          <motion.button
+            variants={buttonVariants}
+            onClick={handleBookTickets}
+            className="flex items-center px-6 py-4 rounded-full bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold text-lg shadow-lg"
+          >
+            <Ticket className="mr-2" size={20} />
+            <span>Book Tickets</span>
+            <motion.span
+              className="ml-2"
+              animate={{
+                x: [0, 5, 0],
+                transition: { repeat: Infinity, duration: 1.5 }
+              }}
+            >→</motion.span>
+          </motion.button>
+        </motion.div>
+      </div>
       
       {/* Main Content */}
       <div className="flex-1 overflow-x-hidden overflow-y-auto">
@@ -552,6 +625,7 @@ export default function BusStations() {
             </motion.div>
           </motion.div>
         </main>
+        <Footer />
       </div>
       
       {/* Mobile nav overlay */}

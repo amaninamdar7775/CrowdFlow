@@ -9,6 +9,7 @@ import {
   Clock
 } from 'lucide-react';
 import Navbar from './Navbar';
+import Footer from './Footer';
 
 export default function LiveStatus() {
   const [station, setStation] = useState('Pune Railway Station');
@@ -386,6 +387,7 @@ export default function LiveStatus() {
             </motion.div>
           </motion.div>
         </main>
+        <Footer />
       </div>
     </div>
   );

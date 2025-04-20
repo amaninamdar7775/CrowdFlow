@@ -12,7 +12,13 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Map,
-  Filter
+  Filter,
+  Calendar,
+  Cloud,
+  CloudRain,
+  Sun,
+  CloudLightning,
+  Wind
 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -52,12 +58,42 @@ const trendsData = [
   { time: '20:00', count: 7120 },
 ];
 
+// Sample weather data (in a real app, this would come from an API)
+const weatherOptions = [
+  { condition: 'sunny', temp: '28°C', icon: Sun, color: 'amber' },
+  { condition: 'cloudy', temp: '22°C', icon: Cloud, color: 'gray' },
+  { condition: 'rainy', temp: '18°C', icon: CloudRain, color: 'blue' },
+  { condition: 'stormy', temp: '16°C', icon: CloudLightning, color: 'indigo' },
+  { condition: 'windy', temp: '20°C', icon: Wind, color: 'cyan' }
+];
+
 export default function Dashboard() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedView, setSelectedView] = useState('overview');
   const [totalVisitors, setTotalVisitors] = useState(10925);
   const [selectedFilter, setSelectedFilter] = useState('all');
   const [filteredLocations, setFilteredLocations] = useState(locationData);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [currentWeather, setCurrentWeather] = useState(weatherOptions[0]);
+  
+  // Update current time every second
+  useEffect(() => {
+    const timeInterval = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
+    return () => clearInterval(timeInterval);
+  }, []);
+  
+  // Randomly change weather every 30 seconds (just for demo purposes)
+  useEffect(() => {
+    const weatherInterval = setInterval(() => {
+      const randomIndex = Math.floor(Math.random() * weatherOptions.length);
+      setCurrentWeather(weatherOptions[randomIndex]);
+    }, 30000);
+    
+    return () => clearInterval(weatherInterval);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -99,6 +135,30 @@ export default function Dashboard() {
     visible: { opacity: 1, y: 0 }
   };
 
+  const dateVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const timeVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: { 
+      scale: 1, 
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut"
+      }
+    }
+  };
+
   const getLocationIcon = (type) => {
     switch(type) {
       case 'railway':
@@ -113,6 +173,21 @@ export default function Dashboard() {
         return null;
     }
   };
+
+  const formattedDate = currentTime.toLocaleDateString('en-US', { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  });
+  
+  const formattedTime = currentTime.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+
+  const WeatherIcon = currentWeather.icon;
   
   return (
     <div className="flex flex-col h-screen bg-gray-50 text-gray-800 font-sans">
@@ -120,6 +195,148 @@ export default function Dashboard() {
       
       {/* Main Content */}
       <div className="flex-1 overflow-x-hidden overflow-y-auto">
+        
+        {/* Date and Weather Banner */}
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: { 
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.2,
+                delayChildren: 0.1
+              }
+            }
+          }}
+          className="bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 text-white px-4 py-6 md:px-8 rounded-xl mx-4 md:mx-6 mt-4 shadow-lg"
+        >
+          <div className="flex flex-col md:flex-row md:justify-between md:items-center">
+            {/* Date Section */}
+            <motion.div 
+              className="flex items-center mb-5 md:mb-0"
+              variants={{
+                hidden: { opacity: 0, x: -20 },
+                visible: { opacity: 1, x: 0, transition: { duration: 0.6 } }
+              }}
+            >
+              <motion.div
+                whileHover={{ rotate: 360 }}
+                transition={{ duration: 0.5 }}
+                className="mr-4 bg-white bg-opacity-20 p-3 rounded-full"
+              >
+                <Calendar size={28} className="text-white" />
+              </motion.div>
+              <div>
+                <motion.h2 
+                  className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-blue-100"
+                  variants={{
+                    hidden: { opacity: 0, y: -10 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.4 } }
+                  }}
+                >
+                  {formattedDate}
+                </motion.h2>
+                <motion.div
+                  className="text-sm font-medium text-blue-100 flex items-center"
+                  variants={{
+                    hidden: { opacity: 0, y: 10 },
+                    visible: { opacity: 1, y: 0, transition: { duration: 0.4, delay: 0.2 } }
+                  }}
+                >
+                  <Clock size={14} className="mr-2" />
+                  {formattedTime}
+                </motion.div>
+              </div>
+            </motion.div>
+            
+            {/* Weather Section */}
+            <motion.div 
+              className="flex items-center backdrop-blur-sm bg-white bg-opacity-20 rounded-xl px-5 py-3 border border-white border-opacity-30"
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+              }}
+              whileHover={{ 
+                scale: 1.05, 
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1)"
+              }}
+            >
+              <motion.div 
+                className={`p-3 rounded-full bg-white bg-opacity-30 mr-4`}
+                initial={{ rotate: 0 }}
+                animate={{ rotate: [0, 10, -10, 10, 0] }}
+                transition={{ 
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 5,
+                  ease: "easeInOut",
+                  repeatDelay: 2
+                }}
+              >
+                <WeatherIcon size={28} className="text-white" />
+              </motion.div>
+              <div>
+                <motion.div 
+                  className="text-sm font-medium opacity-90"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: { opacity: 1, transition: { delay: 0.3 } }
+                  }}
+                >
+                  Today's Weather
+                </motion.div>
+                <div className="flex items-center">
+                  <motion.span 
+                    className="text-2xl font-bold"
+                    variants={{
+                      hidden: { opacity: 0, scale: 0.8 },
+                      visible: { opacity: 1, scale: 1, transition: { delay: 0.4, type: "spring" } }
+                    }}
+                  >
+                    {currentWeather.temp}
+                  </motion.span>
+                  <motion.span 
+                    className="ml-2 text-sm capitalize backdrop-blur-sm bg-white bg-opacity-10 px-2 py-1 rounded-lg"
+                    variants={{
+                      hidden: { opacity: 0 },
+                      visible: { opacity: 1, transition: { delay: 0.5 } }
+                    }}
+                  >
+                    {currentWeather.condition}
+                  </motion.span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Weather Forecast Pills - Optional addition */}
+          <motion.div 
+            className="flex space-x-2 md:space-x-4 mt-5 overflow-x-auto pb-2 md:justify-center"
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { delay: 0.6, duration: 0.8 } }
+            }}
+          >
+            {weatherOptions.map((option, index) => {
+              const WeatherComponentIcon = option.icon;
+              return (
+                <motion.div 
+                  key={option.condition}
+                  className="flex items-center px-3 py-1 bg-white bg-opacity-10 rounded-full border border-white border-opacity-20 text-sm whitespace-nowrap"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.2 + (index * 0.1) }}
+                  whileHover={{ scale: 1.1 }}
+                >
+                  <WeatherComponentIcon size={14} className="mr-1" />
+                  <span>{option.temp}</span>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+        </motion.div>
         
         {/* Dashboard Header */}
         <div className="bg-white border-b border-gray-200 px-4 py-4 md:py-6 md:px-6">
@@ -402,6 +619,7 @@ export default function Dashboard() {
             </motion.div>
           </motion.div>
         </main>
+        <Footer />
       </div>
       
       {/* Mobile nav overlay */}
