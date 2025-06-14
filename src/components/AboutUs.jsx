@@ -46,11 +46,12 @@ const AboutUs = () => {
       image: Female
     },
     {
-      name: "Shweta Kalbhor",
-      role: "ADT23SOCB1114",
-      bio: "Student at MIT Art Design & Technology University",
-      image: Female
-    }
+  name: "Om Akolkar", 
+  role: "ADT24SOCBD078", 
+  bio: "Student at MIT Art Design & Technology University",
+  image: Male 
+}
+
   ];
 
   return (

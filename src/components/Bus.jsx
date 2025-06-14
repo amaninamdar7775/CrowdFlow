@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { Link } from 'react-router-dom';
 
 const initialStationAreas = [
   { id: 1, name: 'Main Terminal', crowdLevel: 55, capacity: 100, trend: 'increasing', status: 'warning' },
