@@ -28,9 +28,9 @@ const AboutUs = () => {
 
   const teamMembers = [
     {
-      name: "Prof. Sushant Shirbhate",
-      role: "Project Guide",
-      bio: "Department of Computer Science Engineering",
+      name: "Dishant Sevak",
+      role: "ADT24SOCBD043",
+      bio: "Student at MIT Art Design & Technology University",
       image: Male
     },
     {
