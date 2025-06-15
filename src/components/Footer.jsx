@@ -230,7 +230,7 @@ const Footer = () => {
             >
               {[
                 { Icon: MapPin, text: "MIT Art, Design and Technology University, Loni Kalbhor, Pune", link: "#" },
-                { Icon: Phone, text: "+91 77759 09442", link: "#" },
+                { Icon: Phone, text: "+91 81779 73774", link: "#" },
                 { Icon: Mail, text: "info@crowdflow.com", link: "#" }
               ].map(({ Icon, text, link }, index) => (
                 <motion.li 
