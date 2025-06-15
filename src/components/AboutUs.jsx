@@ -31,7 +31,7 @@ const AboutUs = () => {
       name: "Dishant Sevak",
       role: "ADT24SOCBD043",
       bio: "Student at MIT Art Design & Technology University",
-      image: Male
+      image: Female
     },
     {
       name: "Aman Inamdar",
