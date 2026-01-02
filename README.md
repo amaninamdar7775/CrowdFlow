@@ -1,12 +1,24 @@
-# React + Vite
+CrowdFlow Analytics System
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+The CrowdFlow Analytics System is an AI-based real-time crowd monitoring solution that identifies people, analyzes crowd density, generates heatmaps, and provides safety alerts to help reduce overcrowding and enhance public safety in busy public areas.
 
-Currently, two official plugins are available:
+✨ Key Highlights
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Real-time people detection and counting
 
-## Expanding the ESLint configuration
+Dynamic heatmaps for crowd density visualization
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Alerts for congested or high-risk zones
+
+Lightweight system compatible with Raspberry Pi
+
+Privacy-aware processing with face blurring
+
+🧠 Technology Stack
+Python • YOLOv5 • OpenCV • Flask • HTML / CSS / JavaScript
+
+🚉 Ideal For
+Railway stations • Public events • Shopping malls • Airports • Stadiums • Large gatherings
+
+🎯 Purpose
+To assist authorities with real-time insights for smarter, safer, and proactive crowd management.
